@@ -1,3 +1,4 @@
+import 'package:country_list/Details.dart';
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 
@@ -118,11 +119,31 @@ class _MyHomePageState extends State<MyHomePage> {
         )
       ),
       //backgroundColor: Colors.black,
-      body: Center(
-        child: ListView(
-          children: [],
-        ),
-      ),
+      body: ListView.builder(
+          itemCount: 20,
+            itemBuilder: (_,index){
+
+              return GestureDetector(
+                onTap: (){
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => Detail()));
+                },
+                child: Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 20),
+                  child: Row(
+                    children: [Image.asset('assets/images/flower.jpeg',height: 50,width: 50,),SizedBox(width: 5,),
+                    Column(
+                      children: const [
+                        Text('Nigeria',style: TextStyle(color: Colors.black),),
+                        Text('Abuja',style: TextStyle(color: Colors.black),)
+                      ],
+                    )],
+                  ),
+                ),
+              );
+    }),
     );
   }
 }
