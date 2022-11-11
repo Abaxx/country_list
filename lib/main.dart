@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,28 +11,28 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
+    return AdaptiveTheme(
+      light: ThemeData(
+        brightness: Brightness.light,
         primarySwatch: Colors.blue,
       ),
-      debugShowCheckedModeBanner: false,
-      home: const MyHomePage(title: 'Explore.'),
+      dark: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.blue,
+      ),
+      initial: AdaptiveThemeMode.light,
+      builder: (theme,darkTheme)=> MaterialApp(
+        title: 'Flutter Demo',
+        theme: theme,
+        darkTheme: darkTheme,
+        debugShowCheckedModeBanner: false,
+        home: const MyHomePage(),),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -42,13 +43,13 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  TextEditingController search = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -62,16 +63,65 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title,style: const TextStyle(color: Colors.white),),
+        title: RichText(text: const TextSpan(text:'Explore',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20,fontFamily: "Pacifico"),
+            children: [TextSpan(text: '.',style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold,fontFamily: "Pacifico"))]),),
+        scrolledUnderElevation: 1,
         actions: [IconButton(onPressed: (){
-          //AdaptiveTheme.of(context).toggleThemeMode();
-        }, icon: const Icon(Icons.bedtime_outlined))
+          AdaptiveTheme.of(context).toggleThemeMode();
+        }, icon: const Icon(Icons.bedtime_outlined),
+        )
         ],
         backgroundColor: Colors.black,
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(100),
+          child: Column(
+            children: [
+              Container(
+                width: 350,
+                height: 48,
+                color: Color(0xff223745),
+                margin: const EdgeInsets.only(left: 20,right: 20,bottom: 10),
+                child: TextField(
+                  controller: search,
+                  style: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+
+                    icon: IconButton(onPressed: (){},icon: const Icon(Icons.search_sharp,size: 22,),color: Colors.white,
+                      padding: EdgeInsets.only(left: 10) ,),
+                   // fillColor: Color(0xff223745),filled: true,
+                    label: const Text('Search Country',style: TextStyle(color: Colors.white,),textAlign: TextAlign.center,),
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.language_outlined,size: 20,),label: Text('EN'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.black,
+                        side: BorderSide(color: Colors.white,width: 0.2),
+                      ),
+                    ),
+                    ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.filter_alt_outlined,size: 20,),label: const Text('Filter'),
+                      style: ElevatedButton.styleFrom(primary: Colors.black,
+                        side: BorderSide(color: Colors.white,width: 0.2),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        )
       ),
-      backgroundColor: Colors.black,
-      body: const Center(
-        child: Text('Hello World!', style: TextStyle(color: Colors.white),)
+      //backgroundColor: Colors.black,
+      body: Center(
+        child: ListView(
+          children: [],
+        ),
       ),
     );
   }

@@ -1,16 +1,20 @@
-# country_list
+# Countries List App
 
 Mobile App with list of countries and details.
 
-## Getting Started
+## Code base description
+Source code consist of 2 files included main.dart.
+There is one asset folder which contained fonts.
 
-This project is a starting point for a Flutter application.
+## Design description
+I used Figma Explore design.
 
-A few resources to get you started if this is your first Flutter project:
+## Libraries
+I used Adaptive theme package for light and dark mode switch.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## New features
+I would like to implement Filter and languages switch, if I have more time.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Challenges
+
+## APK Link
