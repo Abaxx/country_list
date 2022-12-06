@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 
 class Detail extends StatelessWidget {
 
+  String name,capital,flag,population,region,language,religion;
+
+  Detail(this.name,this.capital,this.flag,this.population,this.region,this.language,this.religion)
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Andorra',),
+        title: Text(name,),
         centerTitle: true,
         leading: BackButton(),
         backgroundColor: Colors.black,
@@ -15,7 +19,7 @@ class Detail extends StatelessWidget {
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 30),
+          margin: const EdgeInsets.symmetric(horizontal: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -23,35 +27,35 @@ class Detail extends StatelessWidget {
                 height: 150,
                 width: 300,
                 margin: EdgeInsets.only(bottom: 5),
-                decoration: const BoxDecoration(
+                decoration:  BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/flower.jpeg',),
+                    image: NetworkImage(flag,),
                     fit: BoxFit.fill,
                   ),
                   borderRadius: const BorderRadius.all(Radius.circular(5)),
                 ),
               ),
               const SizedBox(height: 5,),
-              RichText(text: const TextSpan(text:'Population: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
-                  children: [TextSpan(text: '77354',style: TextStyle(color: Colors.white70,))]),),
+              RichText(text:  TextSpan(text:'Population: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
+                  children: [TextSpan(text: population,style: TextStyle(color: Colors.white70,))]),),
               SizedBox(height: 5,),
-              RichText(text: const TextSpan(text:'Region: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
-                  children: [TextSpan(text: 'Europe',style: TextStyle(color: Colors.white70,))]),),
+              RichText(text: TextSpan(text:'Region: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
+                  children: [TextSpan(text: region,style: TextStyle(color: Colors.white70,))]),),
               SizedBox(height: 5,),
-              RichText(text: const TextSpan(text:'Capital: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
-                  children: [TextSpan(text: 'Andora la Vella',style: TextStyle(color: Colors.white70,))]),),
+              RichText(text: TextSpan(text:'Capital: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
+                  children: [TextSpan(text: capital,style: TextStyle(color: Colors.white70,))]),),
               SizedBox(height: 5,),
               RichText(text: const TextSpan(text:'Motto: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
                   children: [TextSpan(text: 'Virtus unita fortior',style: TextStyle(color: Colors.white70,))]),),
-              SizedBox(height: 15,),
-              RichText(text: const TextSpan(text:'Official language: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
-                  children: [TextSpan(text: 'Catalan',style: TextStyle(color: Colors.white70,))]),),
+              const SizedBox(height: 15,),
+              RichText(text: TextSpan(text:'Official language: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
+                  children: [TextSpan(text: language,style: TextStyle(color: Colors.white70,))]),),
               SizedBox(height: 5,),
               RichText(text: const TextSpan(text:'Ethnic group: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
                   children: [TextSpan(text: 'Andorran, spanish, portuguese',style: TextStyle(color: Colors.white70,))]),),
               SizedBox(height: 5,),
-              RichText(text: const TextSpan(text:'Religion: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
-                  children: [TextSpan(text: 'Christianity',style: TextStyle(color: Colors.white70,))]),),
+              RichText(text: TextSpan(text:'Religion: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
+                  children: [TextSpan(text: religion,style: TextStyle(color: Colors.white70,))]),),
               SizedBox(height: 5,),
               RichText(text: const TextSpan(text:'Government: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
                   children: [TextSpan(text: 'Parliamentary democracy',style: TextStyle(color: Colors.white70,))]),),

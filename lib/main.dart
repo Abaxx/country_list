@@ -1,4 +1,5 @@
 import 'package:country_list/Details.dart';
+import 'package:country_provider2/country_provider2.dart';
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 
@@ -35,15 +36,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -53,13 +45,45 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController search = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+
+    loadData();
+  }
+
+  void loadData() async {
+
+    final allCountries = await CountryProvider.instance.getAllCountries();
+    countries = allCountries;
+
+    /*final allCountryNames = await CountryProvider.instance.getAllCountries(filter: CountryFilter(isName: true,));
+    names = allCountryNames.map((e) => e.name).toList();
+
+    final allCountryCapitals = await CountryProvider.instance.getAllCountries(filter: CountryFilter(isCapital: true,));
+    capitals = allCountryCapitals.map((e) => e.capital).toList();
+
+    final allCountryFlags = await CountryProvider.instance.getAllCountries(filter: CountryFilter(isFlag: true,));
+    flags = allCountryFlags.map((e) => e.capital).toList();*/
+
+  }
+
+  searchCountriesByName(String searchName) async {
+
+    final searchResults = await CountryProvider.instance.getCountriesByName(searchName);
+    return searchResults;
+
+  }
+
+// Countries data
+  //List names = [];
+  //List capitals = [];
+  //List flags = [];
+  List results = [];
+  List countries = [];
+  List countriesData = [];
+
+  @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -84,11 +108,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 margin: const EdgeInsets.only(left: 20,right: 20,bottom: 10),
                 child: TextField(
                   controller: search,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     border: InputBorder.none,
 
-                    icon: IconButton(onPressed: (){},icon: const Icon(Icons.search_sharp,size: 22,),color: Colors.white,
+                    icon: IconButton(onPressed: (){
+                       results = searchCountriesByName(search.toString());
+                       countries = results;
+                       if(results.isEmpty){
+                        countriesData = countries;
+                       }else {
+                        countriesData = results;
+                       }
+                    },
+                    icon: const Icon(Icons.search_sharp,size: 22,),color: Colors.white,
                       padding: EdgeInsets.only(left: 10) ,),
                    // fillColor: Color(0xff223745),filled: true,
                     label: const Text('Search Country',style: TextStyle(color: Colors.white,),textAlign: TextAlign.center,),
@@ -96,19 +129,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.language_outlined,size: 20,),label: Text('EN'),
+                    ElevatedButton.icon(onPressed: (){}, icon: const Icon(Icons.language_outlined,size: 20,),label: Text('EN'),
                       style: ElevatedButton.styleFrom(
                         primary: Colors.black,
-                        side: BorderSide(color: Colors.white,width: 0.2),
+                        side: const BorderSide(color: Colors.white,width: 0.2),
                       ),
                     ),
-                    ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.filter_alt_outlined,size: 20,),label: const Text('Filter'),
+                    ElevatedButton.icon(onPressed: (){}, icon: const Icon(Icons.filter_alt_outlined,size: 20,),label: const Text('Filter'),
                       style: ElevatedButton.styleFrom(primary: Colors.black,
-                        side: BorderSide(color: Colors.white,width: 0.2),
+                        side: const BorderSide(color: Colors.white,width: 0.2),
                       ),
                     ),
                   ],
@@ -126,22 +159,38 @@ class _MyHomePageState extends State<MyHomePage> {
               return GestureDetector(
                 onTap: (){
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => Detail()));
+                      MaterialPageRoute(builder: (context) => Detail(
+                        countriesData[index].name.toString(),countriesData[index].capital,
+                        countriesData[index].flag,countriesData[index].population,
+                        countriesData[index].region,countriesData[index].language,
+                        countriesData[index].religion))
+                        );
                 },
-                child: Container(
+                child: Card(
+                  child: Container(
                   height: 50,
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 20),
                   child: Row(
-                    children: [Image.asset('assets/images/flower.jpeg',height: 50,width: 50,),SizedBox(width: 5,),
-                    Column(
-                      children: const [
-                        Text('Nigeria',style: TextStyle(color: Colors.black),),
-                        Text('Abuja',style: TextStyle(color: Colors.black),)
-                      ],
-                    )],
+                    children: [ 
+                      Container(
+                height: 50,
+                width: 50,
+                decoration:  BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(countriesData[index].flag.toString()),
+                    fit: BoxFit.fill,
                   ),
+                  borderRadius: const BorderRadius.all(Radius.circular(5)),
                 ),
+              ),const SizedBox(width: 5,),
+                    Column(
+                      children: [
+                        Text(countriesData[index].name.toString(),style: const TextStyle(color: Colors.black),),
+                        Text(countriesData[index].capital.toString(),style: const TextStyle(color: Colors.black),)
+                      ],)
+                    ]),
+                )),
               );
     }),
     );
