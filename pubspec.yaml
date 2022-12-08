@@ -1,4 +1,4 @@
-name: country_list
+name: explore
 description: Mobile App with list of countries and details.
 
 # The following line prevents the package from being accidentally published to
@@ -37,7 +37,10 @@ dependencies:
 
   # To make API requests
   http: ^0.13.5
+
   country_provider2: ^1.0.2
+
+  flutter_svg: ^1.1.6
 
 
 dev_dependencies:

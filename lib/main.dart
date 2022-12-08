@@ -1,7 +1,8 @@
-import 'package:country_list/Details.dart';
+import 'package:explore/Details.dart';
 import 'package:country_provider2/country_provider2.dart';
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() {
   runApp(const MyApp());
@@ -42,20 +43,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  TextEditingController search = TextEditingController();
+  TextEditingController textEditSearch = TextEditingController();
 
   @override
   void initState() {
-    super.initState();
-
     loadData();
+    super.initState();
   }
 
-  void loadData() async {
 
-    final allCountries = await CountryProvider.instance.getAllCountries();
-    countries = allCountries;
-
+   loadData() {
+    CountryProvider.instance.getAllCountries().then((value) {
+      setState(()=> countriesData = value);
+    });
     /*final allCountryNames = await CountryProvider.instance.getAllCountries(filter: CountryFilter(isName: true,));
     names = allCountryNames.map((e) => e.name).toList();
 
@@ -67,17 +67,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   }
 
-  searchCountriesByName(String searchName) async {
-
-    final searchResults = await CountryProvider.instance.getCountriesByName(searchName);
-    return searchResults;
-
+  void searchByCountryName(String countryName){
+      setState(() {
+        try {
+          CountryProvider.instance
+              .getCountriesByName(countryName).then((value) {
+            countriesData = value as List;
+          });
+        } on Exception catch (e) {
+          print(Exception(e));
+        }
+      },
+      );
   }
 
 // Countries data
-  //List names = [];
-  //List capitals = [];
-  //List flags = [];
   List results = [];
   List countries = [];
   List countriesData = [];
@@ -91,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: RichText(text: const TextSpan(text:'Explore',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20,fontFamily: "Pacifico"),
             children: [TextSpan(text: '.',style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold,fontFamily: "Pacifico"))]),),
         scrolledUnderElevation: 1,
-        actions: [IconButton(onPressed: (){
+        actions: [IconButton(onPressed: ()async{
           AdaptiveTheme.of(context).toggleThemeMode();
         }, icon: const Icon(Icons.bedtime_outlined),
         )
@@ -104,25 +108,19 @@ class _MyHomePageState extends State<MyHomePage> {
               Container(
                 width: 350,
                 height: 48,
-                color: Color(0xff223745),
+                color: const Color(0xff223745),
                 margin: const EdgeInsets.only(left: 20,right: 20,bottom: 10),
                 child: TextField(
-                  controller: search,
+                  controller: textEditSearch,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     border: InputBorder.none,
 
-                    icon: IconButton(onPressed: (){
-                       results = searchCountriesByName(search.toString());
-                       countries = results;
-                       if(results.isEmpty){
-                        countriesData = countries;
-                       }else {
-                        countriesData = results;
-                       }
+                    icon: IconButton(onPressed: () {
+                      searchByCountryName(textEditSearch.text);
                     },
                     icon: const Icon(Icons.search_sharp,size: 22,),color: Colors.white,
-                      padding: EdgeInsets.only(left: 10) ,),
+                      padding: const EdgeInsets.only(left: 10) ,),
                    // fillColor: Color(0xff223745),filled: true,
                     label: const Text('Search Country',style: TextStyle(color: Colors.white,),textAlign: TextAlign.center,),
                   ),
@@ -133,13 +131,113 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton.icon(onPressed: (){}, icon: const Icon(Icons.language_outlined,size: 20,),label: Text('EN'),
+                    ElevatedButton.icon(onPressed: (){
+                      final snackBar = SnackBar(content: Container(
+                        height: 450,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [Text('Languages',style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.bold),),Icon(Icons.cancel_presentation,size: 15,color: Colors.white, )],
+                            ),
+                            const SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [Text('Bahasa',style: TextStyle(color: Colors.white,fontSize: 15),),Icon(Icons.circle_outlined,size: 15,color: Colors.white, )],
+                            ),
+                            const SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [Text('Deutsch',style: TextStyle(color: Colors.white,fontSize: 15),),Icon(Icons.circle_outlined,size: 15,color: Colors.white, )],
+                            ),
+                            const SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [Text('English',style: TextStyle(color: Colors.white,fontSize: 15),),Icon(Icons.circle_outlined,size: 15,color: Colors.white, )],
+                            ),
+                            const SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [Text('Espanol',style: TextStyle(color: Colors.white,fontSize: 15),),Icon(Icons.circle_outlined,size: 15,color: Colors.white, )],
+                            ),
+                            const SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [Text('Francaise',style: TextStyle(color: Colors.white,fontSize: 15),),Icon(Icons.circle_outlined,size: 15,color: Colors.white, )],
+                            ),
+                            const SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [Text('Italiano',style: TextStyle(color: Colors.white,fontSize: 15),),Icon(Icons.circle_outlined,size: 15,color: Colors.white, )],
+                            ),
+                            const SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [Text('portugues',style: TextStyle(color: Colors.white,fontSize: 15),),Icon(Icons.circle_outlined,size: 15,color: Colors.white, )],
+                            ),
+                            const SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [Text('Pycckuu',style: TextStyle(color: Colors.white,fontSize: 15),),Icon(Icons.circle_outlined,size: 15,color: Colors.white, )],
+                            ),
+                            const SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [Text('Svenska',style: TextStyle(color: Colors.white,fontSize: 15),),Icon(Icons.circle_outlined,size: 15,color: Colors.white, )],
+                            ),
+                            const SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [Text('Turkce',style: TextStyle(color: Colors.white,fontSize: 15),),Icon(Icons.circle_outlined,size: 15,color: Colors.white, )],
+                            )
+                          ],
+                        ),
+                      ),
+                          behavior: SnackBarBehavior.floating,
+                          margin: const EdgeInsets.symmetric(horizontal: 15),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
+                          ),
+                          backgroundColor: Colors.black);
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }, icon: const Icon(Icons.language_outlined,size: 20,),label: const Text('EN'),
                       style: ElevatedButton.styleFrom(
                         primary: Colors.black,
                         side: const BorderSide(color: Colors.white,width: 0.2),
                       ),
                     ),
-                    ElevatedButton.icon(onPressed: (){}, icon: const Icon(Icons.filter_alt_outlined,size: 20,),label: const Text('Filter'),
+                    ElevatedButton.icon(onPressed: (){
+                      final snackBar = SnackBar(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15)),
+                        ),
+                          content: Container(
+                        height: 130,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [Text('Filter',style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.bold),),Icon(Icons.cancel_presentation,size: 15,color: Colors.white, )],
+                            ),
+                            const SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [Text('Continent',style: TextStyle(color: Colors.white,fontSize: 15),),Icon(Icons.arrow_downward_outlined,size: 15,color: Colors.white, )],
+                            ),
+                            const SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [Text('Time Zone',style: TextStyle(color: Colors.white,fontSize: 15),),Icon(Icons.arrow_downward_outlined,size: 15,color: Colors.white, )],
+                            )
+                          ],
+                        ),
+                      ),
+                        behavior: SnackBarBehavior.floating,
+                        margin: EdgeInsets.symmetric(horizontal: 15),
+                        backgroundColor: Colors.black);
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                      icon: const Icon(Icons.filter_alt_outlined,size: 20,),label: const Text('Filter'),
                       style: ElevatedButton.styleFrom(primary: Colors.black,
                         side: const BorderSide(color: Colors.white,width: 0.2),
                       ),
@@ -153,17 +251,18 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       //backgroundColor: Colors.black,
       body: ListView.builder(
-          itemCount: 20,
+          itemCount: countriesData.length,
             itemBuilder: (_,index){
 
               return GestureDetector(
                 onTap: (){
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => Detail(
-                        countriesData[index].name.toString(),countriesData[index].capital,
-                        countriesData[index].flag,countriesData[index].population,
-                        countriesData[index].region,countriesData[index].language,
-                        countriesData[index].religion))
+                        countriesData[index].name.toString(),countriesData[index].capital.toString(),
+                        countriesData[index].flag.toString(),countriesData[index].population.toString(),
+                        countriesData[index].region.toString(),countriesData[index].languages[0],
+                        countriesData[index].area.toString(),countriesData[index].currencies[0],countriesData[index].timezones[0].toString())
+                      )
                         );
                 },
                 child: Card(
@@ -176,18 +275,17 @@ class _MyHomePageState extends State<MyHomePage> {
                       Container(
                 height: 50,
                 width: 50,
-                decoration:  BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(countriesData[index].flag.toString()),
-                    fit: BoxFit.fill,
-                  ),
-                  borderRadius: const BorderRadius.all(Radius.circular(5)),
-                ),
-              ),const SizedBox(width: 5,),
+                decoration:  const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                ), 
+                        child: SvgPicture.network(countriesData[index].flag.toString()),
+              ),
+                      const SizedBox(width: 5,),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(countriesData[index].name.toString(),style: const TextStyle(color: Colors.black),),
-                        Text(countriesData[index].capital.toString(),style: const TextStyle(color: Colors.black),)
+                        Text(countriesData[index].name.toString(),style: const TextStyle(color: Colors.black),textAlign: TextAlign.center,),
+                        Text(countriesData[index].capital.toString(),style: const TextStyle(color: Colors.black54),)
                       ],)
                     ]),
                 )),

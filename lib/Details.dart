@@ -1,11 +1,13 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class Detail extends StatelessWidget {
 
-  String name,capital,flag,population,region,language,religion;
+  String name,capital,flag,population,region,area,timezone;
+  var language,currency;
 
-  Detail(this.name,this.capital,this.flag,this.population,this.region,this.language,this.religion)
+  Detail(this.name,this.capital,this.flag,this.population,this.region,this.language,this.area,this.currency,this.timezone);
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +30,9 @@ class Detail extends StatelessWidget {
                 width: 300,
                 margin: EdgeInsets.only(bottom: 5),
                 decoration:  BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(flag,),
-                    fit: BoxFit.fill,
-                  ),
                   borderRadius: const BorderRadius.all(Radius.circular(5)),
                 ),
+                child: SvgPicture.network(flag),
               ),
               const SizedBox(height: 5,),
               RichText(text:  TextSpan(text:'Population: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
@@ -45,36 +44,19 @@ class Detail extends StatelessWidget {
               RichText(text: TextSpan(text:'Capital: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
                   children: [TextSpan(text: capital,style: TextStyle(color: Colors.white70,))]),),
               SizedBox(height: 5,),
-              RichText(text: const TextSpan(text:'Motto: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
-                  children: [TextSpan(text: 'Virtus unita fortior',style: TextStyle(color: Colors.white70,))]),),
               const SizedBox(height: 15,),
               RichText(text: TextSpan(text:'Official language: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
-                  children: [TextSpan(text: language,style: TextStyle(color: Colors.white70,))]),),
+                  children: [TextSpan(text: language.toString(),style: TextStyle(color: Colors.white70,))]),),
               SizedBox(height: 5,),
-              RichText(text: const TextSpan(text:'Ethnic group: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
-                  children: [TextSpan(text: 'Andorran, spanish, portuguese',style: TextStyle(color: Colors.white70,))]),),
+              RichText(text: TextSpan(text:'Area: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
+                  children: [TextSpan(text: area,style: TextStyle(color: Colors.white70,))]),),
               SizedBox(height: 5,),
-              RichText(text: TextSpan(text:'Religion: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
-                  children: [TextSpan(text: religion,style: TextStyle(color: Colors.white70,))]),),
+              RichText(text: TextSpan(text:'Currency.to: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
+                  children: [TextSpan(text: currency.toString(),style: TextStyle(color: Colors.white70,))]),),
               SizedBox(height: 5,),
-              RichText(text: const TextSpan(text:'Government: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
-                  children: [TextSpan(text: 'Parliamentary democracy',style: TextStyle(color: Colors.white70,))]),),
+              RichText(text: TextSpan(text:'Time Zone: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
+                  children: [TextSpan(text: timezone,style: TextStyle(color: Colors.white70,))]),),
               SizedBox(height: 15,),
-              RichText(text: const TextSpan(text:'Independence: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
-                  children: [TextSpan(text: '8th September,1278',style: TextStyle(color: Colors.white70,))]),),
-              SizedBox(height: 5,),
-              RichText(text: const TextSpan(text:'Area: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
-                  children: [TextSpan(text: '467.63km2',style: TextStyle(color: Colors.white70,))]),),
-              SizedBox(height: 5,),
-              RichText(text: const TextSpan(text:'Currency: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
-                  children: [TextSpan(text: 'Euro',style: TextStyle(color: Colors.white70,))]),),
-              SizedBox(height: 5,),
-              RichText(text: const TextSpan(text:'GDP: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
-                  children: [TextSpan(text: 'USD3,400 billion',style: TextStyle(color: Colors.white70,))]),),
-              SizedBox(height: 15,),
-              RichText(text: const TextSpan(text:'Time zone: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
-                  children: [TextSpan(text: 'UTC+01',style: TextStyle(color: Colors.white70,))]),),
-              SizedBox(height: 5,),
               RichText(text: const TextSpan(text:'Date format: ',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),
                   children: [TextSpan(text: 'dd/mm/yyyy',style: TextStyle(color: Colors.white70,))]),),
               SizedBox(height: 5,),
