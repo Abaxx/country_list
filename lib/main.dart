@@ -48,8 +48,16 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     loadData();
+    textEditSearch.addListener(() {
+      if(textEditSearch.text.isEmpty){
+        loadData();
+      }else {
+        searchByCountryName(textEditSearch.text);
+      }
+    });
     super.initState();
   }
+
 
 
    loadData() {
@@ -74,15 +82,12 @@ class _MyHomePageState extends State<MyHomePage> {
               .getCountriesByName(countryName).then((value) {
             countriesData = value as List;
           });
-        } on Exception catch (e) {
-          print(Exception(e));
-        }
+        } on Exception catch (e) {}
       },
       );
   }
 
 // Countries data
-  List results = [];
   List countries = [];
   List countriesData = [];
 
